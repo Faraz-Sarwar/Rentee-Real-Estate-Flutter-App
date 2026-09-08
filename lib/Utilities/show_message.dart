@@ -7,7 +7,7 @@ class Utils {
       msg: message,
       backgroundColor: AppColors.primary,
       textColor: AppColors.white,
-      toastLength: Toast.LENGTH_SHORT,
+      fontSize: 16,
     );
   }
 }

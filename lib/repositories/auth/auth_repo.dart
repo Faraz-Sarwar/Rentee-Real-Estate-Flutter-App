@@ -29,7 +29,7 @@ class AuthRepo {
           e.code == "invalid-credential") {
         throw Exception("Invalid email or password! Please try again");
       } else {
-        throw Exception(e.message ?? "An unknown error occured");
+        throw Exception("An unknown error occured. Please try again later");
       }
     } on SocketException catch (e) {
       throw Exception("Login failed. No internet connection");
@@ -69,7 +69,7 @@ class AuthRepo {
       } else if (e.code == "network-request-failed") {
         throw Exception("Login failed. Check your internet connection");
       } else {
-        throw Exception(e.message ?? "An unknown error occured");
+        throw Exception("An unknown error occured. Please try again later");
       }
     } on SocketException catch (e) {
       throw Exception("Login failed! No internet connection");

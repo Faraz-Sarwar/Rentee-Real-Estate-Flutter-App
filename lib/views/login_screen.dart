@@ -20,13 +20,13 @@ class LoginScreen extends ConsumerWidget {
   final emailController = TextEditingController();
   final passController = TextEditingController();
   final confirmPassController = TextEditingController();
-  String error = "";
+  String? error;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    print(error);
     final authVm = AuthViewModel();
     final authState = ref.watch(loginProvider);
+    print(authState.error);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -68,24 +68,31 @@ class LoginScreen extends ConsumerWidget {
                                 ? const CircularProgressIndicator()
                                 : const Text('Login'),
                             onPressed: () async {
-                              bool isSuccess = false;
-                              try {
-                                isSuccess = await authVm.login(
-                                  emailController.text.trim(),
-                                  passController.text.trim(),
-                                );
-                                if (isSuccess) {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    CupertinoPageRoute(
-                                      builder: (context) => const HomeScreen(),
-                                    ),
+                              await ref
+                                  .read(loginProvider.notifier)
+                                  .login(
+                                    emailController.text.trim(),
+                                    passController.text.trim(),
                                   );
-                                } else {
-                                  Utils.showMessage(error);
-                                }
-                              } catch (e) {
-                                error = e.toString();
+
+                              error = (ref.read(loginProvider).error)!
+                                  .replaceAll('Exception: '.trim(), '');
+
+                              if (error != null) {
+                                Utils.showMessage(error!);
+                              }
+                              if (emailController.text.isEmpty ||
+                                  passController.text.isEmpty) {
+                                Utils.showMessage(
+                                  'Email and Password are required',
+                                );
+                              } else {
+                                Navigator.pushReplacement(
+                                  context,
+                                  CupertinoPageRoute(
+                                    builder: (context) => const HomeScreen(),
+                                  ),
+                                );
                               }
                             },
                           ),
@@ -100,14 +107,34 @@ class LoginScreen extends ConsumerWidget {
                             hintText2: "Password",
                             hintText3: "Confirm Password",
                             onPressed: () async {
-                              try {
-                                bool isSuccess = await authVm.SignUp(
-                                  emailController.text.trim(),
-                                  passController.text.trim(),
-                                );
-                              } catch (e) {
-                                Utils.showMessage(error);
+                              await ref
+                                  .read(loginProvider.notifier)
+                                  .SignUp(
+                                    emailController.text.trim(),
+                                    passController.text.trim(),
+                                  );
+
+                              error =
+                                  (ref.read(loginProvider).error ??
+                                          "Unexpected error: Login Failed")
+                                      .replaceAll('Exception:'.trim(), '');
+
+                              if (error != null) {
+                                Utils.showMessage(error!);
                               }
+                              if (emailController.text.isEmpty ||
+                                  passController.text.isEmpty ||
+                                  confirmPassController.text.isEmpty) {
+                                Utils.showMessage('All fields are required');
+                              } else {
+                                Navigator.pushReplacement(
+                                  context,
+                                  CupertinoPageRoute(
+                                    builder: (context) => const HomeScreen(),
+                                  ),
+                                );
+                              }
+                              print(error);
                             },
                           ),
                         ],
