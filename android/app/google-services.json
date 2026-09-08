@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "627462554158",
+    "project_id": "rentee-rental-app",
+    "storage_bucket": "rentee-rental-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:627462554158:android:55cad2d97bd802d2c5d5bf",
+        "android_client_info": {
+          "package_name": "com.example.rentee_real_estate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJY3ECSkzLYs-UHV_KWZEMueka3Eoo1zY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
