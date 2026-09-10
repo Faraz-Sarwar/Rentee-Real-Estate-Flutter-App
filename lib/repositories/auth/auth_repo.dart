@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthRepo {
@@ -31,9 +32,9 @@ class AuthRepo {
       } else {
         throw Exception("An unknown error occured. Please try again later");
       }
-    } on SocketException catch (e) {
+    } on SocketException {
       throw Exception("Login failed. No internet connection");
-    } on TimeoutException catch (e) {
+    } on TimeoutException {
       throw Exception("Request timed out! Check your internet connection");
     } catch (e) {
       throw Exception("An unexpected error occured! $e");
@@ -41,6 +42,7 @@ class AuthRepo {
   }
 
   Future<UserCredential?> signUpWithEmailAndPassword(
+    String userName,
     String email,
     String password,
   ) async {
@@ -49,6 +51,11 @@ class AuthRepo {
           .createUserWithEmailAndPassword(email: email, password: password)
           .timeout(const Duration(seconds: 15));
       if (userCredential.user != null) {
+        final uid = FirebaseAuth.instance.currentUser!.uid;
+        await FirebaseFirestore.instance.collection('users').doc(uid).set({
+          'name': userName,
+          'email': email,
+        });
         return userCredential;
       } else {
         return null;
@@ -71,12 +78,16 @@ class AuthRepo {
       } else {
         throw Exception("An unknown error occured. Please try again later");
       }
-    } on SocketException catch (e) {
+    } on SocketException {
       throw Exception("Login failed! No internet connection");
-    } on TimeoutException catch (e) {
+    } on TimeoutException {
       throw Exception("Request timed out! Check your internet connection");
     } catch (e) {
       throw Exception("An unexpected error occured! $e");
     }
+  }
+
+  Future<void> logOut() async {
+    await _auth.signOut();
   }
 }

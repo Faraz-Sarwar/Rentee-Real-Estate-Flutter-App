@@ -3,6 +3,7 @@ import 'package:rentee_real_estate/components/custom_button.dart';
 import 'package:rentee_real_estate/components/custom_text_field.dart';
 
 class SignUpView extends StatelessWidget {
+  final TextEditingController userNameController;
   final TextEditingController emailController;
   final TextEditingController passController;
   final TextEditingController confirmPassController;
@@ -14,6 +15,7 @@ class SignUpView extends StatelessWidget {
   final VoidCallback onPressed;
   const SignUpView({
     super.key,
+    required this.userNameController,
     required this.emailController,
     required this.passController,
     required this.confirmPassController,
@@ -29,6 +31,8 @@ class SignUpView extends StatelessWidget {
     return Column(
       children: [
         const SizedBox(height: 32),
+        CustomTextField(controller: userNameController, hintText: "Username"),
+        const SizedBox(height: 16),
         CustomTextField(controller: emailController, hintText: "Email"),
         const SizedBox(height: 16),
         CustomTextField(controller: passController, hintText: "Password"),
