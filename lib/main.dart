@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
         primaryColor: AppColors.primary,
         fontFamily: "Poppins",
       ),
+
       home: hasSeenOnboarding ? const AuthWrapper() : const OnBoardingScreen(),
     );
   }

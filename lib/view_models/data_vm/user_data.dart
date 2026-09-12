@@ -1,10 +1,21 @@
-import 'package:flutter_riverpod/legacy.dart';
-import 'package:rentee_real_estate/view_models/data_vm/data_state.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rentee_real_estate/models/property_model.dart';
+import 'package:rentee_real_estate/models/user_model.dart';
+import 'package:rentee_real_estate/repositories/data/data_repo.dart';
 
-final dataProvider = StateNotifierProvider<UserDataVm, DataState>(
-  (ref) => UserDataVm(),
+final dataProviderVm = Provider<UserDataVm>(
+  (ref) => UserDataVm(ref.read(dataRepoProvider)),
 );
 
-class UserDataVm extends StateNotifier<DataState> {
-  UserDataVm() : super(DataState());
+class UserDataVm {
+  final DataRepo _dataRepo;
+  UserDataVm(this._dataRepo);
+
+  Future<List<PropertyModel>> loadProperties() async {
+    return await _dataRepo.getProperties();
+  }
+
+  Future<UserModel> loadUserInfo(uid) async {
+    return await _dataRepo.getUserInfo(uid);
+  }
 }

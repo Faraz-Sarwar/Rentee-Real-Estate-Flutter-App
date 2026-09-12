@@ -3,12 +3,12 @@ import 'package:rentee_real_estate/repositories/auth/auth_repo.dart';
 import 'package:rentee_real_estate/view_models/auth_vm/auth_state.dart';
 
 final authProvider = StateNotifierProvider<AuthViewModel, AuthState>(
-  (ref) => AuthViewModel(),
+  (ref) => AuthViewModel(AuthRepo()),
 );
 
 class AuthViewModel extends StateNotifier<AuthState> {
-  final AuthRepo _repo = AuthRepo();
-  AuthViewModel() : super(AuthState());
+  final AuthRepo _repo;
+  AuthViewModel(this._repo) : super(AuthState());
 
   Future<void> login(String email, String password) async {
     state = AuthState(isLoading: true);

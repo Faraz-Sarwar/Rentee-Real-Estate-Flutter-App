@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:rentee_real_estate/Utilities/colors.dart';
 import 'package:rentee_real_estate/main.dart';
-import 'package:rentee_real_estate/views/auth_screen.dart';
+import 'package:rentee_real_estate/views/auth_wrapper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OnBoardingScreen extends StatefulWidget {
@@ -20,7 +20,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     if (context.mounted) {
       Navigator.pushReplacement(
         context,
-        CupertinoPageRoute(builder: (context) => AuthScreen()),
+        CupertinoPageRoute(builder: (context) => const AuthWrapper()),
       );
     }
   }

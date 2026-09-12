@@ -31,15 +31,28 @@ class SignUpView extends StatelessWidget {
     return Column(
       children: [
         const SizedBox(height: 32),
-        CustomTextField(controller: userNameController, hintText: "Username"),
+        CustomTextField(
+          controller: userNameController,
+          hintText: "Username",
+          hideText: false,
+        ),
         const SizedBox(height: 16),
-        CustomTextField(controller: emailController, hintText: "Email"),
+        CustomTextField(
+          controller: emailController,
+          hintText: "Email",
+          hideText: false,
+        ),
         const SizedBox(height: 16),
-        CustomTextField(controller: passController, hintText: "Password"),
+        CustomTextField(
+          controller: passController,
+          hintText: "Password",
+          hideText: true,
+        ),
         const SizedBox(height: 16),
         CustomTextField(
           controller: confirmPassController,
           hintText: "Confirm password",
+          hideText: true,
         ),
         const SizedBox(height: 32),
         CustomButton(

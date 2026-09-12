@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rentee_real_estate/Utilities/colors.dart';
@@ -6,19 +5,36 @@ import 'package:rentee_real_estate/Utilities/show_message.dart';
 import 'package:rentee_real_estate/components/Sign_up_view.dart';
 import 'package:rentee_real_estate/components/login_view.dart';
 import 'package:rentee_real_estate/view_models/auth_vm/auth_vm.dart';
-import 'package:rentee_real_estate/views/home_screen.dart';
 
-class AuthScreen extends ConsumerWidget {
-  AuthScreen({super.key});
+class AuthScreen extends ConsumerStatefulWidget {
+  const AuthScreen({super.key});
 
-  final userController = TextEditingController();
-  final emailController = TextEditingController();
-  final passController = TextEditingController();
-  final confirmPassController = TextEditingController();
+  @override
+  ConsumerState<AuthScreen> createState() => _AuthScreenState();
+}
+
+class _AuthScreenState extends ConsumerState<AuthScreen> {
+  final loginEmailController = TextEditingController();
+  final loginPassController = TextEditingController();
+  final signupuserController = TextEditingController();
+  final signupEmailController = TextEditingController();
+  final signupPassController = TextEditingController();
+  final signupConfirmPassController = TextEditingController();
   String? error;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void dispose() {
+    loginEmailController.dispose();
+    loginPassController.dispose();
+    signupuserController.dispose();
+    signupEmailController.dispose();
+    signupPassController.dispose();
+    signupConfirmPassController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
     return DefaultTabController(
       length: 2,
@@ -55,38 +71,40 @@ class AuthScreen extends ConsumerWidget {
                       child: TabBarView(
                         children: <Widget>[
                           LoginView(
-                            emailController: emailController,
-                            passController: passController,
+                            emailController: loginEmailController,
+                            passController: loginPassController,
                             buttonContent: authState.isLoading
-                                ? const CircularProgressIndicator()
+                                ? const CircularProgressIndicator(
+                                    color: AppColors.white,
+                                  )
                                 : const Text('Login'),
                             onPressed: () async {
                               await ref
                                   .read(authProvider.notifier)
                                   .login(
-                                    emailController.text.trim(),
-                                    passController.text.trim(),
+                                    loginEmailController.text.trim(),
+                                    loginPassController.text.trim(),
                                   );
 
                               error = (ref.read(authProvider).error)
                                   ?.replaceAll('Exception: ', '');
-
-                              if (error != null) {
-                                Utils.showMessage(error!);
-                              }
-                              if (emailController.text.isEmpty ||
-                                  passController.text.isEmpty) {
+                              if (loginEmailController.text.isEmpty ||
+                                  loginPassController.text.isEmpty) {
                                 Utils.showMessage(
                                   'Email and Password are required',
                                 );
+                              } else if (error != null) {
+                                Utils.showMessage(error!);
+                              } else {
+                                return null;
                               }
                             },
                           ),
                           SignUpView(
-                            userNameController: userController,
-                            emailController: emailController,
-                            passController: passController,
-                            confirmPassController: confirmPassController,
+                            userNameController: signupuserController,
+                            emailController: signupEmailController,
+                            passController: signupPassController,
+                            confirmPassController: signupConfirmPassController,
                             buttonContent: authState.isLoading
                                 ? const CircularProgressIndicator()
                                 : const Text('Sign up'),
@@ -97,22 +115,22 @@ class AuthScreen extends ConsumerWidget {
                               await ref
                                   .read(authProvider.notifier)
                                   .SignUp(
-                                    userController.text.trim(),
-                                    emailController.text.trim(),
-                                    passController.text.trim(),
+                                    signupuserController.text.trim(),
+                                    signupEmailController.text.trim(),
+                                    signupPassController.text.trim(),
                                   );
 
                               error = (ref.read(authProvider).error)
                                   ?.replaceAll('Exception: ', '');
-
-                              if (error != null) {
-                                Utils.showMessage(error!);
-                              }
-                              if (userController.text.isEmpty ||
-                                  emailController.text.isEmpty ||
-                                  passController.text.isEmpty ||
-                                  confirmPassController.text.isEmpty) {
+                              if (signupuserController.text.isEmpty ||
+                                  signupEmailController.text.isEmpty ||
+                                  signupPassController.text.isEmpty ||
+                                  signupConfirmPassController.text.isEmpty) {
                                 Utils.showMessage('All fields are required');
+                              } else if (error != null) {
+                                Utils.showMessage(error!);
+                              } else {
+                                return null;
                               }
                             },
                           ),

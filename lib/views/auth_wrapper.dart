@@ -21,7 +21,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
         if (user.hasData) {
           return const HomeScreen();
         } else {
-          return AuthScreen();
+          return const AuthScreen();
         }
       },
     );

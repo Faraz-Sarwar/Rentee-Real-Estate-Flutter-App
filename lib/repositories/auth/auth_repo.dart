@@ -53,6 +53,7 @@ class AuthRepo {
       if (userCredential.user != null) {
         final uid = FirebaseAuth.instance.currentUser!.uid;
         await FirebaseFirestore.instance.collection('users').doc(uid).set({
+          'id': uid,
           'name': userName,
           'email': email,
         });
@@ -74,7 +75,7 @@ class AuthRepo {
       } else if (e.code == "too-many-requests") {
         throw Exception("Too many attempts. Please wait and try again");
       } else if (e.code == "network-request-failed") {
-        throw Exception("Login failed. Check your internet connection");
+        throw Exception("Sign up failed. Check your internet connection");
       } else {
         throw Exception("An unknown error occured. Please try again later");
       }
