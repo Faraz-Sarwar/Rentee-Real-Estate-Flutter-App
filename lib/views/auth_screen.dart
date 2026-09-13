@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rentee_real_estate/Utilities/colors.dart';
 import 'package:rentee_real_estate/Utilities/show_message.dart';
 import 'package:rentee_real_estate/components/Sign_up_view.dart';
+import 'package:rentee_real_estate/components/custom_button.dart';
 import 'package:rentee_real_estate/components/login_view.dart';
 import 'package:rentee_real_estate/view_models/auth_vm/auth_vm.dart';
 
@@ -70,69 +71,112 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                       height: 400,
                       child: TabBarView(
                         children: <Widget>[
-                          LoginView(
-                            emailController: loginEmailController,
-                            passController: loginPassController,
-                            buttonContent: authState.isLoading
-                                ? const CircularProgressIndicator(
-                                    color: AppColors.white,
-                                  )
-                                : const Text('Login'),
-                            onPressed: () async {
-                              await ref
-                                  .read(authProvider.notifier)
-                                  .login(
-                                    loginEmailController.text.trim(),
-                                    loginPassController.text.trim(),
-                                  );
+                          Column(
+                            children: [
+                              LoginView(
+                                emailController: loginEmailController,
+                                passController: loginPassController,
+                              ),
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: const Text(
+                                  'Forget password?',
+                                  style: TextStyle(fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                              const SizedBox(height: 24),
+                              CustomButton(
+                                buttonContent: authState.isLoading
+                                    ? const CircularProgressIndicator(
+                                        color: AppColors.white,
+                                      )
+                                    : const Text(
+                                        'Login',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
 
-                              error = (ref.read(authProvider).error)
-                                  ?.replaceAll('Exception: ', '');
-                              if (loginEmailController.text.isEmpty ||
-                                  loginPassController.text.isEmpty) {
-                                Utils.showMessage(
-                                  'Email and Password are required',
-                                );
-                              } else if (error != null) {
-                                Utils.showMessage(error!);
-                              } else {
-                                return null;
-                              }
-                            },
+                                onPressed: () async {
+                                  await ref
+                                      .read(authProvider.notifier)
+                                      .login(
+                                        loginEmailController.text.trim(),
+                                        loginPassController.text.trim(),
+                                      );
+
+                                  error = (ref.read(authProvider).error)
+                                      ?.replaceAll('Exception: ', '');
+                                  if (loginEmailController.text.isEmpty ||
+                                      loginPassController.text.isEmpty) {
+                                    Utils.showMessage(
+                                      'Email and Password are required',
+                                    );
+                                  } else if (error != null) {
+                                    Utils.showMessage(error!);
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                width: MediaQuery.of(context).size.height * 0.2,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.055,
+                              ),
+                            ],
                           ),
-                          SignUpView(
-                            userNameController: signupuserController,
-                            emailController: signupEmailController,
-                            passController: signupPassController,
-                            confirmPassController: signupConfirmPassController,
-                            buttonContent: authState.isLoading
-                                ? const CircularProgressIndicator()
-                                : const Text('Sign up'),
-                            hintText1: "Email",
-                            hintText2: "Password",
-                            hintText3: "Confirm Password",
-                            onPressed: () async {
-                              await ref
-                                  .read(authProvider.notifier)
-                                  .SignUp(
-                                    signupuserController.text.trim(),
-                                    signupEmailController.text.trim(),
-                                    signupPassController.text.trim(),
-                                  );
+                          Column(
+                            children: [
+                              SignUpView(
+                                userNameController: signupuserController,
+                                emailController: signupEmailController,
+                                passController: signupPassController,
+                                confirmPassController:
+                                    signupConfirmPassController,
 
-                              error = (ref.read(authProvider).error)
-                                  ?.replaceAll('Exception: ', '');
-                              if (signupuserController.text.isEmpty ||
-                                  signupEmailController.text.isEmpty ||
-                                  signupPassController.text.isEmpty ||
-                                  signupConfirmPassController.text.isEmpty) {
-                                Utils.showMessage('All fields are required');
-                              } else if (error != null) {
-                                Utils.showMessage(error!);
-                              } else {
-                                return null;
-                              }
-                            },
+                                hintText1: "Email",
+                                hintText2: "Password",
+                                hintText3: "Confirm Password",
+                              ),
+                              CustomButton(
+                                buttonContent: authState.isLoading
+                                    ? const CircularProgressIndicator()
+                                    : const Text(
+                                        'Sign up',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                onPressed: () async {
+                                  await ref
+                                      .read(authProvider.notifier)
+                                      .SignUp(
+                                        signupuserController.text.trim(),
+                                        signupEmailController.text.trim(),
+                                        signupPassController.text.trim(),
+                                      );
+
+                                  error = (ref.read(authProvider).error)
+                                      ?.replaceAll('Exception: ', '');
+                                  if (signupuserController.text.isEmpty ||
+                                      signupEmailController.text.isEmpty ||
+                                      signupPassController.text.isEmpty ||
+                                      signupConfirmPassController
+                                          .text
+                                          .isEmpty) {
+                                    Utils.showMessage(
+                                      'All fields are required',
+                                    );
+                                  } else if (error != null) {
+                                    Utils.showMessage(error!);
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                                width: MediaQuery.of(context).size.height * 0.2,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.055,
+                              ),
+                            ],
                           ),
                         ],
                       ),

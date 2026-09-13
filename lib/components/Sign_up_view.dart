@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:rentee_real_estate/components/custom_button.dart';
 import 'package:rentee_real_estate/components/custom_text_field.dart';
 
 class SignUpView extends StatelessWidget {
@@ -11,8 +10,6 @@ class SignUpView extends StatelessWidget {
   final String? hintText1;
   final String? hintText2;
   final String? hintText3;
-  final Widget buttonContent;
-  final VoidCallback onPressed;
   const SignUpView({
     super.key,
     required this.userNameController,
@@ -22,8 +19,6 @@ class SignUpView extends StatelessWidget {
     this.hintText1,
     this.hintText2,
     this.hintText3,
-    required this.buttonContent,
-    required this.onPressed,
   });
 
   @override
@@ -55,12 +50,6 @@ class SignUpView extends StatelessWidget {
           hideText: true,
         ),
         const SizedBox(height: 32),
-        CustomButton(
-          buttonContent: buttonContent,
-          onPressed: onPressed,
-          width: MediaQuery.of(context).size.width * 0.5,
-          height: 50,
-        ),
       ],
     );
     ;

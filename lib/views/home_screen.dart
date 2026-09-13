@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rentee_real_estate/Utilities/colors.dart';
-import 'package:rentee_real_estate/models/user_model.dart';
 import 'package:rentee_real_estate/view_models/auth_vm/auth_vm.dart';
 import 'package:rentee_real_estate/view_models/data_vm/user_data.dart';
 
