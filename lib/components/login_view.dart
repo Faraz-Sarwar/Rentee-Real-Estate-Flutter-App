@@ -16,12 +16,14 @@ class LoginView extends StatelessWidget {
       children: [
         const SizedBox(height: 32),
         CustomTextField(
+          icon: Icons.email_outlined,
           controller: emailController,
           hintText: "Email",
           hideText: false,
         ),
         const SizedBox(height: 16),
         CustomTextField(
+          icon: Icons.lock_outline_rounded,
           controller: passController,
           hintText: "Password",
           hideText: true,

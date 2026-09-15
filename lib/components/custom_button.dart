@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rentee_real_estate/Utilities/colors.dart';
+import 'package:rentee_real_estate/Utilities/app_colors.dart';
 
 class CustomButton extends StatelessWidget {
   final Widget buttonContent;

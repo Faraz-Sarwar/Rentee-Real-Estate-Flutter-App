@@ -1,11 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rentee_real_estate/Utilities/colors.dart';
+import 'package:rentee_real_estate/Utilities/app_colors.dart';
+import 'package:rentee_real_estate/Utilities/app_sizing.dart';
 import 'package:rentee_real_estate/Utilities/show_message.dart';
 import 'package:rentee_real_estate/components/Sign_up_view.dart';
 import 'package:rentee_real_estate/components/custom_button.dart';
 import 'package:rentee_real_estate/components/login_view.dart';
 import 'package:rentee_real_estate/view_models/auth_vm/auth_vm.dart';
+import 'package:rentee_real_estate/views/forget_password_screen.dart';
 
 class AuthScreen extends ConsumerStatefulWidget {
   const AuthScreen({super.key});
@@ -36,7 +39,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authProvider);
+    final authState = ref.watch(authVmProvider);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -50,7 +53,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(AppSize.medium),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
@@ -79,9 +82,20 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                               ),
                               Align(
                                 alignment: Alignment.topRight,
-                                child: const Text(
-                                  'Forget password?',
-                                  style: TextStyle(fontWeight: FontWeight.w500),
+                                child: GestureDetector(
+                                  onTap: () => Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                      builder: (context) =>
+                                          const ForgetPasswordScreen(),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Forget password?',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 24),
@@ -99,13 +113,13 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
 
                                 onPressed: () async {
                                   await ref
-                                      .read(authProvider.notifier)
+                                      .read(authVmProvider.notifier)
                                       .login(
                                         loginEmailController.text.trim(),
                                         loginPassController.text.trim(),
                                       );
 
-                                  error = (ref.read(authProvider).error)
+                                  error = (ref.read(authVmProvider).error)
                                       ?.replaceAll('Exception: ', '');
                                   if (loginEmailController.text.isEmpty ||
                                       loginPassController.text.isEmpty) {
@@ -139,7 +153,9 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                               ),
                               CustomButton(
                                 buttonContent: authState.isLoading
-                                    ? const CircularProgressIndicator()
+                                    ? const CircularProgressIndicator(
+                                        color: AppColors.white,
+                                      )
                                     : const Text(
                                         'Sign up',
                                         style: TextStyle(
@@ -148,14 +164,14 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                                       ),
                                 onPressed: () async {
                                   await ref
-                                      .read(authProvider.notifier)
+                                      .read(authVmProvider.notifier)
                                       .SignUp(
                                         signupuserController.text.trim(),
                                         signupEmailController.text.trim(),
                                         signupPassController.text.trim(),
                                       );
 
-                                  error = (ref.read(authProvider).error)
+                                  error = (ref.read(authVmProvider).error)
                                       ?.replaceAll('Exception: ', '');
                                   if (signupuserController.text.isEmpty ||
                                       signupEmailController.text.isEmpty ||

@@ -1,5 +1,5 @@
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:rentee_real_estate/Utilities/colors.dart';
+import 'package:rentee_real_estate/Utilities/app_colors.dart';
 
 class Utils {
   static Future<void> showMessage(String message) async {

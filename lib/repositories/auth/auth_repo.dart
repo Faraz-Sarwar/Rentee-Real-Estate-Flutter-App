@@ -91,4 +91,28 @@ class AuthRepo {
   Future<void> logOut() async {
     await _auth.signOut();
   }
+
+  Future<void> forgotPassword(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email.trim());
+    } on FirebaseAuthException catch (e) {
+      // Handle invalid formatting immediately
+      if (e.code == "invalid-email" || e.code == "auth/invalid-email") {
+        throw Exception("Please enter a valid email address.");
+      }
+      // Handle network or configuration issues
+      else if (e.code == "network-request-failed") {
+        throw Exception(
+          "Network error. Please check your internet connection.",
+        );
+      }
+      // Fallback for any other Firebase-specific errors
+      else {
+        throw Exception("Could not process request. Please try again later.");
+      }
+    } catch (e) {
+      // Catch-all for non-Firebase exceptions
+      throw Exception("An unexpected error occurred. Please try again.");
+    }
+  }
 }

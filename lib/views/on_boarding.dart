@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
-import 'package:rentee_real_estate/Utilities/colors.dart';
+import 'package:rentee_real_estate/Utilities/app_colors.dart';
 import 'package:rentee_real_estate/main.dart';
 import 'package:rentee_real_estate/views/auth_wrapper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
