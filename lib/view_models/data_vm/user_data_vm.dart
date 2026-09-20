@@ -12,11 +12,19 @@ class UserDataVm {
   UserDataVm(this._dataRepo);
 
   Future<List<PropertyModel>> loadProperties() async {
-    return await _dataRepo.getProperties();
+    try {
+      return await _dataRepo.getProperties();
+    } catch (e) {
+      throw Exception(e.toString());
+    }
   }
 
   Future<UserModel> loadUserInfo(uid) async {
-    return await _dataRepo.getUserInfo(uid);
+    try {
+      return await _dataRepo.getUserInfo(uid);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
   }
 
   Future<Set<String>> loadPropertyType() async {

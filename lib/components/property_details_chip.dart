@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:rentee_real_estate/Utilities/app_colors.dart';
-import 'package:rentee_real_estate/models/property_model.dart';
 
 class PropertyDetailsChip extends StatelessWidget {
-  final PropertyModel property;
   final String text;
   final IconData icon;
   const PropertyDetailsChip({
     super.key,
-    required this.property,
     required this.icon,
     required this.text,
   });
@@ -16,7 +13,7 @@ class PropertyDetailsChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(6),
+      padding: EdgeInsets.all(7),
       decoration: BoxDecoration(
         color: AppColors.background,
         borderRadius: BorderRadius.circular(12),

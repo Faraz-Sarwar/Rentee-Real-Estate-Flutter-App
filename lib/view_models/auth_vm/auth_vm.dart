@@ -43,4 +43,14 @@ class AuthViewModel extends StateNotifier<AuthState> {
       state = AuthState(error: e.toString());
     }
   }
+
+  Future<void> signInWithGoogle() async {
+    state = AuthState(isGoogleSignUpLoading: true);
+    try {
+      await _repo.signInWithGoogle();
+      state = AuthState(isGoogleSignUpLoading: false);
+    } catch (e) {
+      state = AuthState(error: e.toString());
+    }
+  }
 }

@@ -84,25 +84,21 @@ class PropertyInfoCard extends StatelessWidget {
                 Row(
                   children: [
                     PropertyDetailsChip(
-                      property: property,
                       icon: Icons.location_on_outlined,
                       text: property.location.split(',')[0].toString(),
                     ),
                     const SizedBox(width: AppSize.small),
                     PropertyDetailsChip(
-                      property: property,
                       icon: Icons.star_border,
                       text: property.rating.toString(),
                     ),
                     const SizedBox(width: AppSize.small),
                     PropertyDetailsChip(
-                      property: property,
                       icon: Icons.bed_rounded,
                       text: '${property.bedrooms.toString()} Bed',
                     ),
                     const SizedBox(width: AppSize.small),
                     PropertyDetailsChip(
-                      property: property,
                       icon: Icons.shower,
                       text: '${property.bedrooms.toString()} Bath',
                     ),

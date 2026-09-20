@@ -12,7 +12,20 @@
           "package_name": "com.example.rentee_real_estate"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "627462554158-sl1ljn0j8ebfl6tara2sutvrctdhq206.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.rentee_real_estate",
+            "certificate_hash": "055a90a41f7d324d2b3568edee55c22db213cee1"
+          }
+        },
+        {
+          "client_id": "627462554158-o3bbbijlh08jsop23qh5e9bhl14i762f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCJY3ECSkzLYs-UHV_KWZEMueka3Eoo1zY"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "627462554158-o3bbbijlh08jsop23qh5e9bhl14i762f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "627462554158-9cbgoc9me3ckpqgape5s6p8em09cvujc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.renteeRealEstate"
+              }
+            }
+          ]
         }
       }
     }

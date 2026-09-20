@@ -1,14 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rentee_real_estate/Utilities/app_colors.dart';
 import 'package:rentee_real_estate/Utilities/app_sizing.dart';
 import 'package:rentee_real_estate/components/custom_text_field.dart';
-import 'package:rentee_real_estate/components/property_details_chip.dart';
 import 'package:rentee_real_estate/components/property_info_card.dart';
 import 'package:rentee_real_estate/models/property_model.dart';
 import 'package:rentee_real_estate/view_models/auth_vm/auth_vm.dart';
-import 'package:rentee_real_estate/view_models/data_vm/user_data.dart';
+import 'package:rentee_real_estate/view_models/data_vm/user_data_vm.dart';
+import 'package:rentee_real_estate/views/property_detail_screen.dart';
 
 final propertyProvider = FutureProvider((ref) async {
   return await ref.read(dataProviderVm).loadProperties();
@@ -46,6 +47,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
   }
 
+  String errorMsg = "";
+
   @override
   Widget build(BuildContext context) {
     final properties = ref.watch(propertyProvider);
@@ -66,24 +69,39 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   userInfo.when(
-                    data: (data) => Text.rich(
-                      TextSpan(
-                        children: [
+                    data: (data) {
+                      print('The name is ${data?.name}');
+                      return Expanded(
+                        child: Text.rich(
                           TextSpan(
-                            text: "Welcome ",
-                            style: TextStyle(fontSize: 18),
+                            children: [
+                              TextSpan(
+                                text: "Welcome ",
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              TextSpan(
+                                text: data?.name != null && data!.name != ""
+                                    ? data.name
+                                    // .split returns List from string after a symbol defined.
+                                    // eg (farazsarwar2002@gmail.com), this will become
+                                    // [text1, (symbol for seperation (@)), text2,]
+                                    //[1. farazsarwar2002, 2.gmail.com]
+                                    : data!.email.split("@")[0],
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
                           ),
-                          TextSpan(
-                            text: '${data!.name}',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    error: (err, StackTrace) => Text(err.toString()),
+                        ),
+                      );
+                    },
+                    error: (err, StackTrace) {
+                      errorMsg = err.toString().replaceAll('Exception: ', '');
+                      return Center(child: Text(errorMsg));
+                    },
                     loading: () => const Text('Loading username...'),
                   ),
                   GestureDetector(
@@ -199,8 +217,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ],
                   ),
                 ),
-                error: (err, StackTrace) => Text('$err'),
-                loading: () => Center(child: const CircularProgressIndicator()),
+                error: (err, StackTrace) {
+                  errorMsg = err.toString().replaceAll('Exception: ', '');
+                  return Center(child: Text(errorMsg));
+                },
+                loading: () =>
+                    Center(child: const CircularProgressIndicator.adaptive()),
               ),
               const SizedBox(height: AppSize.large),
               const Text(
@@ -226,7 +248,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             itemBuilder: (context, index) {
                               final property = filteredProperties[index];
 
-                              return PropertyInfoCard(property: property);
+                              return GestureDetector(
+                                onTap: () => Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                    builder: (context) => PropertyDetailScreen(
+                                      property: property,
+                                    ),
+                                  ),
+                                ),
+                                child: PropertyInfoCard(property: property),
+                              );
                               // return Container(
                               //   height:
                               //       MediaQuery.of(context).size.height * 0.35,
@@ -358,9 +390,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           ),
                         );
                       },
-                      error: (err, StackTrace) =>
-                          Center(child: Text(err.toString())),
-                      loading: () => const CircularProgressIndicator(),
+                      error: (err, StackTrace) {
+                        errorMsg = err.toString().replaceAll('Exception: ', '');
+                        return Center(child: Text(errorMsg));
+                      },
+                      loading: () => const CircularProgressIndicator.adaptive(),
                     )
                   : properties.when(
                       data: (data) {
@@ -379,14 +413,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             itemBuilder: (context, index) {
                               final PropertyModel property =
                                   filteredProperties[index];
-                              return PropertyInfoCard(property: property);
+                              return GestureDetector(
+                                onTap: () => Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                    builder: (context) => PropertyDetailScreen(
+                                      property: property,
+                                    ),
+                                  ),
+                                ),
+                                child: PropertyInfoCard(property: property),
+                              );
                             },
                           ),
                         );
                       },
-                      error: (err, StackTrace) =>
-                          Center(child: Text('${err.toString}')),
-                      loading: () => Center(child: CircularProgressIndicator()),
+                      error: (err, StackTrace) {
+                        errorMsg = err.toString().replaceAll('Exception: ', '');
+                        return Center(child: Text(errorMsg));
+                      },
+                      loading: () => Center(
+                        child: const CircularProgressIndicator.adaptive(),
+                      ),
                     ),
             ],
           ),

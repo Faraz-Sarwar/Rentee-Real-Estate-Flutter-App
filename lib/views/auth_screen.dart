@@ -6,6 +6,7 @@ import 'package:rentee_real_estate/Utilities/app_sizing.dart';
 import 'package:rentee_real_estate/Utilities/show_message.dart';
 import 'package:rentee_real_estate/components/Sign_up_view.dart';
 import 'package:rentee_real_estate/components/custom_button.dart';
+import 'package:rentee_real_estate/components/google_sign_in_container.dart';
 import 'package:rentee_real_estate/components/login_view.dart';
 import 'package:rentee_real_estate/view_models/auth_vm/auth_vm.dart';
 import 'package:rentee_real_estate/views/forget_password_screen.dart';
@@ -71,128 +72,185 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                     ),
                     const SizedBox(height: 24),
                     SizedBox(
-                      height: 400,
+                      height: 500,
                       child: TabBarView(
                         children: <Widget>[
-                          Column(
-                            children: [
-                              LoginView(
-                                emailController: loginEmailController,
-                                passController: loginPassController,
-                              ),
-                              Align(
-                                alignment: Alignment.topRight,
-                                child: GestureDetector(
-                                  onTap: () => Navigator.push(
-                                    context,
-                                    CupertinoPageRoute(
-                                      builder: (context) =>
-                                          const ForgetPasswordScreen(),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppSize.medium,
+                            ),
+                            child: Column(
+                              children: [
+                                LoginView(
+                                  emailController: loginEmailController,
+                                  passController: loginPassController,
+                                ),
+                                Align(
+                                  alignment: Alignment.topRight,
+                                  child: GestureDetector(
+                                    onTap: () => Navigator.push(
+                                      context,
+                                      CupertinoPageRoute(
+                                        builder: (context) =>
+                                            const ForgetPasswordScreen(),
+                                      ),
                                     ),
-                                  ),
-                                  child: const Text(
-                                    'Forget password?',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
+                                    child: const Text(
+                                      'Forget password?',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(height: 24),
-                              CustomButton(
-                                buttonContent: authState.isLoading
-                                    ? const CircularProgressIndicator(
-                                        color: AppColors.white,
-                                      )
-                                    : const Text(
-                                        'Login',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
+                                const SizedBox(height: 24),
+                                CustomButton(
+                                  buttonContent: authState.isLoading
+                                      ? const CircularProgressIndicator(
+                                          color: AppColors.white,
+                                        )
+                                      : const Text(
+                                          'Login',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
 
-                                onPressed: () async {
-                                  await ref
-                                      .read(authVmProvider.notifier)
-                                      .login(
-                                        loginEmailController.text.trim(),
-                                        loginPassController.text.trim(),
+                                  onPressed: () async {
+                                    await ref
+                                        .read(authVmProvider.notifier)
+                                        .login(
+                                          loginEmailController.text.trim(),
+                                          loginPassController.text.trim(),
+                                        );
+
+                                    error = (ref.read(authVmProvider).error)
+                                        ?.replaceAll('Exception: ', '');
+                                    if (loginEmailController.text.isEmpty ||
+                                        loginPassController.text.isEmpty) {
+                                      Utils.showMessage(
+                                        'Email and Password are required',
                                       );
+                                    } else if (error != null) {
+                                      Utils.showMessage(error!);
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  width:
+                                      MediaQuery.of(context).size.height * 0.2,
+                                  height:
+                                      MediaQuery.of(context).size.height *
+                                      0.055,
+                                ),
 
-                                  error = (ref.read(authVmProvider).error)
-                                      ?.replaceAll('Exception: ', '');
-                                  if (loginEmailController.text.isEmpty ||
-                                      loginPassController.text.isEmpty) {
-                                    Utils.showMessage(
-                                      'Email and Password are required',
-                                    );
-                                  } else if (error != null) {
+                                const SizedBox(height: AppSize.vLarge),
+                                GestureDetector(
+                                  onTap: () async {
+                                    await ref
+                                        .read(authVmProvider.notifier)
+                                        .signInWithGoogle();
+
+                                    error =
+                                        ref
+                                            .read(authVmProvider)
+                                            .error
+                                            ?.replaceAll('Exception: ', '') ??
+                                        "";
+
                                     Utils.showMessage(error!);
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                width: MediaQuery.of(context).size.height * 0.2,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.055,
-                              ),
-                            ],
+                                  },
+
+                                  child: GoogleSignInContainer(
+                                    text: 'Sign in with google',
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                          Column(
-                            children: [
-                              SignUpView(
-                                userNameController: signupuserController,
-                                emailController: signupEmailController,
-                                passController: signupPassController,
-                                confirmPassController:
-                                    signupConfirmPassController,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppSize.medium,
+                            ),
+                            child: Column(
+                              children: [
+                                SignUpView(
+                                  userNameController: signupuserController,
+                                  emailController: signupEmailController,
+                                  passController: signupPassController,
+                                  confirmPassController:
+                                      signupConfirmPassController,
 
-                                hintText1: "Email",
-                                hintText2: "Password",
-                                hintText3: "Confirm Password",
-                              ),
-                              CustomButton(
-                                buttonContent: authState.isLoading
-                                    ? const CircularProgressIndicator(
-                                        color: AppColors.white,
-                                      )
-                                    : const Text(
-                                        'Sign up',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
+                                  hintText1: "Email",
+                                  hintText2: "Password",
+                                  hintText3: "Confirm Password",
+                                ),
+                                CustomButton(
+                                  buttonContent: authState.isLoading
+                                      ? const CircularProgressIndicator(
+                                          color: AppColors.white,
+                                        )
+                                      : const Text(
+                                          'Sign up',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                onPressed: () async {
-                                  await ref
-                                      .read(authVmProvider.notifier)
-                                      .SignUp(
-                                        signupuserController.text.trim(),
-                                        signupEmailController.text.trim(),
-                                        signupPassController.text.trim(),
-                                      );
+                                  onPressed: () async {
+                                    await ref
+                                        .read(authVmProvider.notifier)
+                                        .SignUp(
+                                          signupuserController.text.trim(),
+                                          signupEmailController.text.trim(),
+                                          signupPassController.text.trim(),
+                                        );
 
-                                  error = (ref.read(authVmProvider).error)
-                                      ?.replaceAll('Exception: ', '');
-                                  if (signupuserController.text.isEmpty ||
-                                      signupEmailController.text.isEmpty ||
-                                      signupPassController.text.isEmpty ||
-                                      signupConfirmPassController
-                                          .text
-                                          .isEmpty) {
-                                    Utils.showMessage(
-                                      'All fields are required',
-                                    );
-                                  } else if (error != null) {
-                                    Utils.showMessage(error!);
-                                  } else {
-                                    return null;
-                                  }
-                                },
-                                width: MediaQuery.of(context).size.height * 0.2,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.055,
-                              ),
-                            ],
+                                    error = (ref.read(authVmProvider).error)
+                                        ?.replaceAll('Exception: ', '');
+                                    if (signupuserController.text.isEmpty ||
+                                        signupEmailController.text.isEmpty ||
+                                        signupPassController.text.isEmpty ||
+                                        signupConfirmPassController
+                                            .text
+                                            .isEmpty) {
+                                      Utils.showMessage(
+                                        'All fields are required',
+                                      );
+                                    } else if (error != null) {
+                                      Utils.showMessage(error!);
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                  width:
+                                      MediaQuery.of(context).size.height * 0.2,
+                                  height:
+                                      MediaQuery.of(context).size.height *
+                                      0.055,
+                                ),
+                                const SizedBox(height: AppSize.vLarge),
+                                GestureDetector(
+                                  onTap: () async {
+                                    await ref
+                                        .read(authVmProvider.notifier)
+                                        .signInWithGoogle();
+                                    error =
+                                        ref
+                                            .read(authVmProvider)
+                                            .error
+                                            ?.replaceAll('Exception: ', '') ??
+                                        "";
+                                    if (error != null || error!.isNotEmpty) {
+                                      Utils.showMessage(error!);
+                                    }
+                                  },
+
+                                  child: GoogleSignInContainer(
+                                    text: 'Sign in with google',
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
