@@ -1,19 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:intl/intl.dart';
 import 'package:rentee_real_estate/Utilities/app_colors.dart';
 import 'package:rentee_real_estate/Utilities/app_sizing.dart';
+import 'package:rentee_real_estate/Utilities/show_message.dart';
 import 'package:rentee_real_estate/components/container_icon.dart';
 import 'package:rentee_real_estate/models/property_model.dart';
+import 'package:rentee_real_estate/repositories/appointment/appointments_repo.dart';
+import 'package:rentee_real_estate/view_models/appointmets_vm/appointment_state.dart';
+import 'package:rentee_real_estate/view_models/appointmets_vm/appointments_vm.dart';
 
-final class ScheduleVisitScreen extends StatefulWidget {
+final appointmentVmProvider =
+    StateNotifierProvider<AppointmentsVm, AppointmentState>(
+      (ref) => AppointmentsVm(ref.read(appointmentsRepoProvider)),
+    );
+
+final class ScheduleVisitScreen extends ConsumerStatefulWidget {
   final PropertyModel property;
   const ScheduleVisitScreen({super.key, required this.property});
 
   @override
-  State<ScheduleVisitScreen> createState() => _ScheduleVisitScreenState();
+  ConsumerState<ScheduleVisitScreen> createState() =>
+      _ScheduleVisitScreenState();
 }
 
-class _ScheduleVisitScreenState extends State<ScheduleVisitScreen> {
+class _ScheduleVisitScreenState extends ConsumerState<ScheduleVisitScreen> {
   Widget _selectItemText({required String text, required IconData icon}) {
     return Row(
       children: [
@@ -24,6 +36,8 @@ class _ScheduleVisitScreenState extends State<ScheduleVisitScreen> {
     );
   }
 
+  String error = "";
+
   int currentIndex = 0;
   final today = DateTime.now();
   DateTime selectedDate = DateTime.now();
@@ -31,6 +45,7 @@ class _ScheduleVisitScreenState extends State<ScheduleVisitScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final appointmentProviver = ref.watch(appointmentVmProvider);
     final startTime = DateTime(
       selectedDate.year,
       selectedDate.month,
@@ -277,6 +292,9 @@ class _ScheduleVisitScreenState extends State<ScheduleVisitScreen> {
                 ),
                 const SizedBox(height: AppSize.medium),
                 TextFormField(
+                  onTapOutside: (event) {
+                    FocusManager.instance.primaryFocus!.unfocus();
+                  },
                   maxLines: 4,
                   maxLength: 200,
                   decoration: InputDecoration(
@@ -300,14 +318,33 @@ class _ScheduleVisitScreenState extends State<ScheduleVisitScreen> {
             backgroundColor: AppColors.primary,
             foregroundColor: AppColors.white,
           ),
-          onPressed: () {},
+          onPressed: () async {
+            await ref
+                .read(appointmentVmProvider.notifier)
+                .bookAppointment(
+                  property: widget.property,
+                  visitDate: selectedDate,
+                  visitTime: selectedTime!,
+                );
+            error = ref.read(appointmentVmProvider).error ?? "";
+            if (error != "") {
+              Utils.showMessage(error);
+            } else {
+              Utils.showMessage("Your appointment has been schedule.");
+            }
+          },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                'Confirm appointment',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
+              appointmentProviver.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : const Text(
+                      'Confirm appointment',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
               const SizedBox(width: AppSize.small),
               const Icon(Icons.arrow_forward, size: 22),
             ],

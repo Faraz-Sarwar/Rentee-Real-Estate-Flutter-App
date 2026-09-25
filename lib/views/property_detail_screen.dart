@@ -134,7 +134,7 @@ class PropertyDetailScreen extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            property.price.toString(),
+                            '\$${property.price.toString()}',
                             style: const TextStyle(
                               color: Colors.black,
                               fontSize: 18,
