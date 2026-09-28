@@ -6,19 +6,21 @@ class CustomButton extends StatelessWidget {
   final double width;
   final double height;
   final VoidCallback onPressed;
+  final Color? color;
   const CustomButton({
     super.key,
     required this.buttonContent,
     required this.onPressed,
     required this.width,
     required this.height,
+    this.color,
   });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.primary,
+        backgroundColor: color ?? AppColors.primary,
         foregroundColor: AppColors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
 

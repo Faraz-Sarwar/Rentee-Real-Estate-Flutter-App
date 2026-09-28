@@ -6,6 +6,7 @@ import 'package:rentee_real_estate/Utilities/app_colors.dart';
 import 'package:rentee_real_estate/Utilities/app_sizing.dart';
 import 'package:rentee_real_estate/Utilities/show_message.dart';
 import 'package:rentee_real_estate/components/container_icon.dart';
+import 'package:rentee_real_estate/components/row_horizental_text.dart';
 import 'package:rentee_real_estate/models/property_model.dart';
 import 'package:rentee_real_estate/repositories/appointment/appointments_repo.dart';
 import 'package:rentee_real_estate/view_models/appointmets_vm/appointment_state.dart';
@@ -26,16 +27,6 @@ final class ScheduleVisitScreen extends ConsumerStatefulWidget {
 }
 
 class _ScheduleVisitScreenState extends ConsumerState<ScheduleVisitScreen> {
-  Widget _selectItemText({required String text, required IconData icon}) {
-    return Row(
-      children: [
-        Icon(icon, color: AppColors.primary, size: 32),
-        const SizedBox(width: AppSize.small),
-        Text(text, style: TextStyle(fontWeight: FontWeight.w600)),
-      ],
-    );
-  }
-
   String error = "";
 
   int currentIndex = 0;
@@ -163,7 +154,7 @@ class _ScheduleVisitScreenState extends ConsumerState<ScheduleVisitScreen> {
                 ),
                 const SizedBox(height: AppSize.medium),
 
-                _selectItemText(
+                RowHorizentalText(
                   text: 'Select a date',
                   icon: Icons.calendar_month,
                 ),
@@ -238,7 +229,7 @@ class _ScheduleVisitScreenState extends ConsumerState<ScheduleVisitScreen> {
                 ),
                 const SizedBox(height: AppSize.medium),
 
-                _selectItemText(text: 'Select time', icon: Icons.watch),
+                RowHorizentalText(text: 'Select time', icon: Icons.watch),
                 const SizedBox(height: AppSize.small),
                 SizedBox(
                   height: MediaQuery.of(context).size.width * 0.18,
@@ -286,7 +277,7 @@ class _ScheduleVisitScreenState extends ConsumerState<ScheduleVisitScreen> {
                 ),
                 const SizedBox(height: AppSize.medium),
 
-                _selectItemText(
+                RowHorizentalText(
                   text: "Any addtional message? (Optional)",
                   icon: Icons.message_outlined,
                 ),
@@ -336,15 +327,10 @@ class _ScheduleVisitScreenState extends ConsumerState<ScheduleVisitScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              appointmentProviver.isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : const Text(
-                      'Confirm appointment',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+              Text(
+                'Confirm appointment',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              ),
               const SizedBox(width: AppSize.small),
               const Icon(Icons.arrow_forward, size: 22),
             ],

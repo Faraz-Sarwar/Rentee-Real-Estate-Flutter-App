@@ -27,6 +27,7 @@ class _FloatingNavbarState extends State<FloatingNavbar> {
     Icons.home,
     Icons.search,
     Icons.schedule,
+    Icons.favorite_border,
     Icons.person_2_outlined,
   ];
 
@@ -58,8 +59,8 @@ class _FloatingNavbarState extends State<FloatingNavbar> {
                 padding: const EdgeInsets.all(AppSize.small),
                 child: AnimatedContainer(
                   duration: const Duration(microseconds: 200),
-                  height: 60,
-                  width: 60,
+                  height: 58,
+                  width: 58,
                   decoration: BoxDecoration(
                     color: isActive ? widget.activeColor : widget.inActiveColor,
                     borderRadius: BorderRadius.circular(50),

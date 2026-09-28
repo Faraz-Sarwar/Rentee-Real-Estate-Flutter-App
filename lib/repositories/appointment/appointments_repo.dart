@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rentee_real_estate/models/appointment_model.dart';
 import 'package:rentee_real_estate/models/property_model.dart';
 
 final appointmentsRepoProvider = Provider<AppointmentsRepo>(
@@ -40,5 +41,20 @@ class AppointmentsRepo {
     } catch (e) {
       throw Exception(e.toString());
     }
+  }
+
+  Stream<List<AppointmentModel>> getAppointments() {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    return _appointments
+        .where('uid', isEqualTo: uid)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => AppointmentModel.fromFirestore(doc))
+              .toList(),
+        )
+        .handleError((e) {
+          throw Exception(e.toString());
+        });
   }
 }

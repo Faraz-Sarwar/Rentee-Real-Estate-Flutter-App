@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rentee_real_estate/Utilities/app_colors.dart';
 import 'package:rentee_real_estate/Utilities/app_sizing.dart';
-import 'package:rentee_real_estate/components/bottom_navbar.dart';
 import 'package:rentee_real_estate/components/custom_text_field.dart';
 import 'package:rentee_real_estate/components/property_info_card.dart';
 import 'package:rentee_real_estate/models/property_model.dart';
@@ -41,7 +40,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   final searchController = TextEditingController();
   String searchQuery = "";
   int selectedIndex = -1;
-  int navbarIndex = 0;
 
   void onChanged(String value) {
     setState(() {
@@ -463,19 +461,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ),
                 ],
               ),
-            ),
-          ),
-          Positioned(
-            left: 16,
-            right: 16,
-            bottom: 20,
-            child: FloatingNavbar(
-              currentIndex: navbarIndex,
-              onTap: (index) {
-                setState(() {
-                  navbarIndex = index;
-                });
-              },
             ),
           ),
         ],

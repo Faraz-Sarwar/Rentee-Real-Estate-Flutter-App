@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:rentee_real_estate/views/auth_screen.dart';
-import 'package:rentee_real_estate/views/home_screen.dart';
+import 'package:rentee_real_estate/views/bottom_navbar.dart';
 
 class AuthWrapper extends StatefulWidget {
   const AuthWrapper({super.key});
@@ -19,7 +19,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, AsyncSnapshot<User?> user) {
         if (user.hasData) {
-          return const HomeScreen();
+          return const BottomNavbar();
         } else {
           return const AuthScreen();
         }
