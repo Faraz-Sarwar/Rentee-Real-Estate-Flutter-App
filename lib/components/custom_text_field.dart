@@ -5,7 +5,7 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
   final bool hideText;
-  final IconData icon;
+  final IconData? icon;
   final void Function(String)? onChanged;
 
   const CustomTextField({
@@ -13,7 +13,7 @@ class CustomTextField extends StatelessWidget {
     required this.controller,
     required this.hintText,
     required this.hideText,
-    required this.icon,
+    this.icon,
     this.onChanged,
   });
 

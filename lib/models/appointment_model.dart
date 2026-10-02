@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AppointmentModel {
   final String id;
-  final DateTime date;
+  DateTime date;
   final String imageUrl;
   final String location;
   final String name;

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rentee_real_estate/models/property_model.dart';
 import 'package:rentee_real_estate/models/user_model.dart';

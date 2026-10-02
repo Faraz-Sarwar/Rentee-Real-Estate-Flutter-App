@@ -52,10 +52,11 @@ class _ForgetPasswordScreenState extends ConsumerState<ForgetPasswordScreen> {
                 forgetPassController.clear();
                 error = ref.read(authVmProvider).error;
                 if (error != null) {
-                  Utils.showMessage(error!);
+                  Utils.showMessage(message: error!);
                 } else {
                   Utils.showMessage(
-                    'Forget password link sent! Please check your email',
+                    message:
+                        'Forget password link sent! Please check your email',
                   );
                 }
               },

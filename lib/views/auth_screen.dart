@@ -151,10 +151,11 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                                                   .text
                                                   .isEmpty) {
                                             Utils.showMessage(
-                                              'Email and Password are required',
+                                              message:
+                                                  'Email and Password are required',
                                             );
                                           } else if (error != null) {
-                                            Utils.showMessage(error!);
+                                            Utils.showMessage(message: error!);
                                           } else {
                                             return null;
                                           }
@@ -183,7 +184,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                                                   ) ??
                                               "";
 
-                                          Utils.showMessage(error!);
+                                          Utils.showMessage(message: error!);
                                         },
                                         child: GoogleSignInContainer(
                                           text: 'Sign in with google',
@@ -251,10 +252,11 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                                                   .text
                                                   .isEmpty) {
                                             Utils.showMessage(
-                                              'All fields are required',
+                                              message:
+                                                  'All fields are required',
                                             );
                                           } else if (error != null) {
-                                            Utils.showMessage(error!);
+                                            Utils.showMessage(message: error!);
                                           } else {
                                             return null;
                                           }
@@ -283,7 +285,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                                               "";
                                           if (error != null ||
                                               error!.isNotEmpty) {
-                                            Utils.showMessage(error!);
+                                            Utils.showMessage(message: error!);
                                           }
                                         },
                                         child: GoogleSignInContainer(

@@ -305,7 +305,7 @@ class _ScheduleVisitScreenState extends ConsumerState<ScheduleVisitScreen> {
               ? null
               : () async {
                   if (selectedTime == null) {
-                    Utils.showMessage('Please select a time');
+                    Utils.showMessage(message: 'Please select a time');
                     return;
                   }
                   await ref
@@ -317,9 +317,11 @@ class _ScheduleVisitScreenState extends ConsumerState<ScheduleVisitScreen> {
                       );
                   error = ref.read(appointmentsVmProvider).error ?? "";
                   if (error != "") {
-                    Utils.showMessage(error);
+                    Utils.showMessage(message: error);
                   } else {
-                    Utils.showMessage("Your appointment has been schedule.");
+                    Utils.showMessage(
+                      message: "Your appointment has been schedule.",
+                    );
                   }
                 },
           child: appointmentProviver.isLoading

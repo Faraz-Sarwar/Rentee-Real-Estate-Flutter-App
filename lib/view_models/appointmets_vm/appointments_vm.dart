@@ -53,4 +53,14 @@ class AppointmentsVm extends StateNotifier<AppointmentState> {
       state = AppointmentState(isLoading: false, error: e.toString());
     }
   }
+
+  Future<void> rescheduleAppointment(DateTime newDate, String id) async {
+    state = AppointmentState(isLoading: true);
+    try {
+      await _appointmentsRepo.rescheduleAppointment(newDate, id);
+      state = AppointmentState(isLoading: false, error: null);
+    } catch (e) {
+      state = AppointmentState(error: e.toString());
+    }
+  }
 }

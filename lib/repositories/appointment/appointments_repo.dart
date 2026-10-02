@@ -65,4 +65,12 @@ class AppointmentsRepo {
       throw Exception(e.message ?? 'Failed to delete appointment');
     }
   }
+
+  Future<void> rescheduleAppointment(DateTime newDate, String id) async {
+    try {
+      await _appointments.doc(id).update({'date': newDate});
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
 }
