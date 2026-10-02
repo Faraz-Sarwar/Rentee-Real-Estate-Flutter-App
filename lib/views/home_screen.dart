@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,27 +6,20 @@ import 'package:rentee_real_estate/Utilities/app_sizing.dart';
 import 'package:rentee_real_estate/components/custom_text_field.dart';
 import 'package:rentee_real_estate/components/property_info_card.dart';
 import 'package:rentee_real_estate/models/property_model.dart';
+import 'package:rentee_real_estate/models/user_model.dart';
 import 'package:rentee_real_estate/view_models/auth_vm/auth_vm.dart';
 import 'package:rentee_real_estate/view_models/data_vm/user_data_vm.dart';
 import 'package:rentee_real_estate/views/property_detail_screen.dart';
 
-final propertyProvider = FutureProvider((ref) async {
-  return await ref.read(dataProviderVm).loadProperties();
-});
-
-final authStateProvider = StreamProvider<User?>((ref) {
-  return FirebaseAuth.instance.authStateChanges();
-});
-
-final userInfoProvider = FutureProvider.autoDispose((ref) async {
-  final user = ref.watch(authStateProvider).value;
-  if (user == null) return null;
-  return ref.read(dataProviderVm).loadUserInfo(user.uid);
-});
-
-final propertyTypeProvider = FutureProvider((ref) async {
-  return await ref.read(dataProviderVm).loadPropertyType();
-});
+String getUserName(UserModel? user) {
+  return user?.name != null && user!.name != ""
+      ? user.name
+      // .split returns List from string after a symbol defined.
+      // eg (farazsarwar2002@gmail.com), this will become
+      // [text1, (symbol for seperation (@)), text2,]
+      //[1. farazsarwar2002, 2.gmail.com]
+      : user!.email.split("@")[0];
+}
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -73,7 +65,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     children: [
                       userInfo.when(
                         data: (data) {
-                          print('The name is ${data?.name}');
                           return Expanded(
                             child: Text.rich(
                               TextSpan(
@@ -83,13 +74,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     style: TextStyle(fontSize: 18),
                                   ),
                                   TextSpan(
-                                    text: data?.name != null && data!.name != ""
-                                        ? data.name
-                                        // .split returns List from string after a symbol defined.
-                                        // eg (farazsarwar2002@gmail.com), this will become
-                                        // [text1, (symbol for seperation (@)), text2,]
-                                        //[1. farazsarwar2002, 2.gmail.com]
-                                        : data!.email.split("@")[0],
+                                    text: getUserName(data),
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 18,

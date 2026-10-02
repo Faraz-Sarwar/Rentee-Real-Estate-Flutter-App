@@ -60,7 +60,6 @@ class PropertyDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -86,8 +85,11 @@ class PropertyDetailScreen extends StatelessWidget {
                     GestureDetector(
                       onTap: () => Navigator.pop(context),
                       child: ContainerIcon(
-                        icon: const Icon(Icons.arrow_back_ios_new),
-                        color: AppColors.white,
+                        icon: const Icon(
+                          Icons.arrow_back_ios_new,
+                          color: AppColors.white,
+                        ),
+                        color: AppColors.primary,
                       ),
                     ),
                     ContainerIcon(

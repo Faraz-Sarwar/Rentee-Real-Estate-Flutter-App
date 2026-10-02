@@ -27,23 +27,19 @@ class _BottomNavbarState extends State<BottomNavbar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          screens[selectedNavbarIndex],
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 20,
-            child: FloatingNavbar(
-              currentIndex: selectedNavbarIndex,
-              onTap: (index) {
-                setState(() {
-                  selectedNavbarIndex = index;
-                });
-              },
-            ),
-          ),
-        ],
+      body: Stack(children: [screens[selectedNavbarIndex]]),
+      bottomNavigationBar: Positioned(
+        left: 0,
+        right: 0,
+        bottom: 20,
+        child: FloatingNavbar(
+          currentIndex: selectedNavbarIndex,
+          onTap: (index) {
+            setState(() {
+              selectedNavbarIndex = index;
+            });
+          },
+        ),
       ),
     );
   }

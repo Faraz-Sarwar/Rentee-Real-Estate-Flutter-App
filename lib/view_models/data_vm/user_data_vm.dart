@@ -7,6 +7,24 @@ final dataProviderVm = Provider<UserDataVm>(
   (ref) => UserDataVm(ref.read(dataRepoProvider)),
 );
 
+final propertyProvider = FutureProvider((ref) async {
+  return await ref.read(dataProviderVm).loadProperties();
+});
+
+final authStateProvider = StreamProvider<User?>((ref) {
+  return FirebaseAuth.instance.authStateChanges();
+});
+
+final userInfoProvider = FutureProvider.autoDispose((ref) async {
+  final user = ref.watch(authStateProvider).value;
+  if (user == null) return null;
+  return ref.read(dataProviderVm).loadUserInfo(user.uid);
+});
+
+final propertyTypeProvider = FutureProvider((ref) async {
+  return await ref.read(dataProviderVm).loadPropertyType();
+});
+
 class UserDataVm {
   final DataRepo _dataRepo;
   UserDataVm(this._dataRepo);

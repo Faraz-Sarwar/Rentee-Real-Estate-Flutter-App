@@ -1,22 +1,81 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rentee_real_estate/Utilities/app_colors.dart';
+import 'package:rentee_real_estate/Utilities/app_sizing.dart';
+import 'package:rentee_real_estate/view_models/data_vm/user_data_vm.dart';
+import 'package:rentee_real_estate/views/home_screen.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
-  @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
+  Widget _infoContainer({required Widget child}) {
+    return Container(
+      height: 60,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: child,
+    );
+  }
 
-class _ProfileScreenState extends State<ProfileScreen> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profileUserInfo = ref.watch(userInfoProvider);
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: AppColors.background,
         title: const Text('Profie'),
         centerTitle: true,
+      ),
+      body: profileUserInfo.when(
+        data: (data) => Padding(
+          padding: const EdgeInsets.all(AppSize.medium),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Center(
+                child: CircleAvatar(
+                  radius: 60,
+                  backgroundColor: AppColors.primary,
+                  child: const Icon(
+                    Icons.person_2_outlined,
+                    size: 48,
+                    color: AppColors.white,
+                  ),
+                ),
+              ),
+              const SizedBox(height: AppSize.large),
+              _infoContainer(
+                child: ListTile(
+                  title: Text(
+                    data?.name != null && data!.name != ""
+                        ? data.name
+                        : data!.email.split("@")[0],
+                  ),
+                  trailing: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.edit_outlined),
+                  ),
+                ),
+              ),
+              const SizedBox(height: AppSize.large),
+              _infoContainer(
+                child: ListTile(
+                  title: Text(data.email),
+                  trailing: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.edit_outlined),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        error: (error, stackTrace) => Center(child: Text(error.toString())),
+        loading: () => Center(child: const CircularProgressIndicator()),
       ),
     );
   }

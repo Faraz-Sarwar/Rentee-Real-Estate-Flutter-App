@@ -5,9 +5,9 @@ import 'package:rentee_real_estate/Utilities/app_sizing.dart';
 class FloatingNavbar extends StatefulWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
-  final activeColor;
-  final inActiveColor;
-  final backgroundColor;
+  final Color activeColor;
+  final Color inActiveColor;
+  final Color backgroundColor;
 
   const FloatingNavbar({
     super.key,
@@ -55,6 +55,7 @@ class _FloatingNavbarState extends State<FloatingNavbar> {
             final bool isActive = widget.currentIndex == index;
             return GestureDetector(
               onTap: () => widget.onTap(index),
+
               child: Padding(
                 padding: const EdgeInsets.all(AppSize.small),
                 child: AnimatedContainer(

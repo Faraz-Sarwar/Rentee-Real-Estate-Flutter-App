@@ -197,7 +197,7 @@ class _AuthScreenState extends ConsumerState<AuthScreen> {
                                     horizontal: AppSize.medium,
                                   ),
                                   child: Column(
-                                    children: [
+                                    children: <Widget>[
                                       SignUpView(
                                         userNameController:
                                             signupuserController,

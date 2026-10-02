@@ -57,4 +57,12 @@ class AppointmentsRepo {
           throw Exception(e.toString());
         });
   }
+
+  Future<void> deleteAppointment(String id) async {
+    try {
+      await _appointments.doc(id).delete();
+    } on FirebaseException catch (e) {
+      throw Exception(e.message ?? 'Failed to delete appointment');
+    }
+  }
 }

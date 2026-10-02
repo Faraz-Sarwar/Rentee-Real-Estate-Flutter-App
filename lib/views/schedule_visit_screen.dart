@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import 'package:intl/intl.dart';
 import 'package:rentee_real_estate/Utilities/app_colors.dart';
 import 'package:rentee_real_estate/Utilities/app_sizing.dart';
@@ -8,14 +7,7 @@ import 'package:rentee_real_estate/Utilities/show_message.dart';
 import 'package:rentee_real_estate/components/container_icon.dart';
 import 'package:rentee_real_estate/components/row_horizental_text.dart';
 import 'package:rentee_real_estate/models/property_model.dart';
-import 'package:rentee_real_estate/repositories/appointment/appointments_repo.dart';
-import 'package:rentee_real_estate/view_models/appointmets_vm/appointment_state.dart';
 import 'package:rentee_real_estate/view_models/appointmets_vm/appointments_vm.dart';
-
-final appointmentVmProvider =
-    StateNotifierProvider<AppointmentsVm, AppointmentState>(
-      (ref) => AppointmentsVm(ref.read(appointmentsRepoProvider)),
-    );
 
 final class ScheduleVisitScreen extends ConsumerStatefulWidget {
   final PropertyModel property;
@@ -36,7 +28,7 @@ class _ScheduleVisitScreenState extends ConsumerState<ScheduleVisitScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final appointmentProviver = ref.watch(appointmentVmProvider);
+    final appointmentProviver = ref.watch(appointmentsVmProvider);
     final startTime = DateTime(
       selectedDate.year,
       selectedDate.month,
@@ -55,11 +47,11 @@ class _ScheduleVisitScreenState extends ConsumerState<ScheduleVisitScreen> {
                 GestureDetector(
                   onTap: () => Navigator.pop(context),
                   child: ContainerIcon(
+                    color: AppColors.primary,
                     icon: const Icon(
                       Icons.arrow_back_ios_new,
                       color: AppColors.white,
                     ),
-                    color: const Color.fromARGB(255, 220, 220, 220),
                   ),
                 ),
                 const SizedBox(height: AppSize.medium),
@@ -309,32 +301,50 @@ class _ScheduleVisitScreenState extends ConsumerState<ScheduleVisitScreen> {
             backgroundColor: AppColors.primary,
             foregroundColor: AppColors.white,
           ),
-          onPressed: () async {
-            await ref
-                .read(appointmentVmProvider.notifier)
-                .bookAppointment(
-                  property: widget.property,
-                  visitDate: selectedDate,
-                  visitTime: selectedTime!,
-                );
-            error = ref.read(appointmentVmProvider).error ?? "";
-            if (error != "") {
-              Utils.showMessage(error);
-            } else {
-              Utils.showMessage("Your appointment has been schedule.");
-            }
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Confirm appointment',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(width: AppSize.small),
-              const Icon(Icons.arrow_forward, size: 22),
-            ],
-          ),
+          onPressed: appointmentProviver.isLoading
+              ? null
+              : () async {
+                  if (selectedTime == null) {
+                    Utils.showMessage('Please select a time');
+                    return;
+                  }
+                  await ref
+                      .read(appointmentsVmProvider.notifier)
+                      .bookAppointment(
+                        property: widget.property,
+                        visitDate: selectedDate,
+                        visitTime: selectedTime!,
+                      );
+                  error = ref.read(appointmentsVmProvider).error ?? "";
+                  if (error != "") {
+                    Utils.showMessage(error);
+                  } else {
+                    Utils.showMessage("Your appointment has been schedule.");
+                  }
+                },
+          child: appointmentProviver.isLoading
+              ? const SizedBox(
+                  height: 22,
+                  width: 22,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.5,
+                    color: AppColors.white,
+                  ),
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Confirm appointment',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(width: AppSize.small),
+                    const Icon(Icons.arrow_forward, size: 22),
+                  ],
+                ),
         ),
       ),
     );
